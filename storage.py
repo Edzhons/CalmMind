@@ -1,20 +1,25 @@
 import json
 import os
 import tempfile
-import sys
 from models import EntryModel
 
 
+def get_app_data_dir(app_name="CalmMind"):
+    if os.name == "nt":
+        base = os.environ.get("APPDATA", os.path.expanduser("~"))
+    else:
+        base = os.path.expanduser("~")
+
+    return os.path.join(base, app_name)
+
+
 class Storage:
-    def __init__(self, filepath="data/entries.json"):
-        if getattr(sys, 'frozen', False):
-            base_path = os.path.dirname(sys.executable)
-        else:
-            base_path = os.path.dirname(__file__)
+    def __init__(self, filename="entries.json"):
+        base_dir = get_app_data_dir("CalmMind")
+        data_dir = os.path.join(base_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
 
-        self.filepath = os.path.join(base_path, filepath)
-
-        os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
+        self.filepath = os.path.join(data_dir, filename)
 
         if not os.path.exists(self.filepath):
             with open(self.filepath, "w") as f:

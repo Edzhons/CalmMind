@@ -38,7 +38,7 @@ class App:
         self.root.configure(bg=self.colors["bg"])
 
         # DATA
-        self.storage = Storage("data/entries.json")
+        self.storage = Storage("entries.json")
         self.entries = self.storage.load_entries()
 
         # SCHEDULER
