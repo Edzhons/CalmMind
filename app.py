@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime, timedelta
 from tkcalendar import DateEntry
+import webbrowser
 from models import EntryModel
 from storage import Storage
 from scheduler import ReminderScheduler
@@ -11,6 +12,8 @@ class App:
     def __init__(self, root):
         self.root = root
         self.root.title("CalmMind (MVP)")
+
+        self.feedback_url = "https://forms.gle/91opNmBzj6jmLPsJ9"
 
         # --- COLORS / THEME ---
         self.colors = {
@@ -109,6 +112,32 @@ class App:
         make_btn("📌 Next", "next").pack(fill="x", pady=2)
         make_btn("💡 Ideas", "ideas").pack(fill="x", pady=2)
         make_btn("🗄 Archive", "archive").pack(fill="x", pady=2)
+
+        # Spacer to push feedback button to bottom
+        tk.Frame(sidebar, bg=self.colors["sidebar_bg"]).pack(expand=True, fill="both")
+
+        feedback_btn = tk.Button(
+            sidebar,
+            text="💬 Feedback",
+            command=self.open_feedback,
+            bg=self.colors["sidebar_button_bg"],
+            fg=self.colors["accent"],           # Accent color text
+            activebackground=self.colors["sidebar_button_active"],
+            activeforeground=self.colors["accent"],
+            bd=0,
+            relief="flat",
+            padx=8,
+            pady=6,
+            anchor="w"
+        )
+
+        self.add_hover(
+            feedback_btn,
+            self.colors["sidebar_button_bg"],
+            self.colors["sidebar_button_active"]
+        )
+
+        feedback_btn.pack(fill="x", pady=(10, 0))
 
         # Main panel
         self.main_panel = tk.Frame(
@@ -879,6 +908,14 @@ class App:
             font=("Helvetica", 11, "bold")
         ).pack(pady=(0, 10))
 
+    def open_feedback(self):
+        try:
+            webbrowser.open(self.feedback_url)
+        except Exception:
+            messagebox.showerror(
+                "Error",
+                "Could not open feedback form in browser."
+            )
 
 if __name__ == "__main__":
     root = tk.Tk()
