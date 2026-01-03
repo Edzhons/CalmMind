@@ -1,0 +1,62 @@
+[
+    {
+        "type": "idea",
+        "title": "Uzsakt jaunu biziiti",
+        "details": "kkada random ideja 3am",
+        "time": null,
+        "done": false,
+        "archived": false,
+        "notified": false,
+        "reminder_time": null
+    },
+    {
+        "type": "task",
+        "title": "j\u0101iznes musars",
+        "details": "gan virtuve, gan istabaa",
+        "time": null,
+        "done": false,
+        "archived": false,
+        "notified": false,
+        "reminder_time": null
+    },
+    {
+        "type": "task",
+        "title": "jasakarto istaba, lidz 13:00",
+        "details": "",
+        "time": "2025-12-11T13:00:00",
+        "done": false,
+        "archived": true,
+        "notified": false,
+        "reminder_time": "2025-12-11T13:00:00"
+    },
+    {
+        "type": "appointment",
+        "title": "Zooms ar prakses vaditaju",
+        "details": "",
+        "time": "2025-12-12T17:30:00",
+        "done": false,
+        "archived": true,
+        "notified": false,
+        "reminder_time": "2025-12-12T17:30:00"
+    },
+    {
+        "type": "task",
+        "title": "Veikals",
+        "details": "Ja ir laika, l\u012bdz r\u012btdienai j\u0101aizbrauc uz veikalu.",
+        "time": "2025-12-10T10:04:00",
+        "done": false,
+        "archived": true,
+        "notified": false,
+        "reminder_time": "2025-12-10T10:04:00"
+    },
+    {
+        "type": "idea",
+        "title": "Minecraft serveris",
+        "details": "Uztaisit mc serveri, taisit ar to passive income.",
+        "time": null,
+        "done": false,
+        "archived": true,
+        "notified": false,
+        "reminder_time": null
+    }
+]
