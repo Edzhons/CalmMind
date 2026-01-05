@@ -63,6 +63,52 @@ class App:
         widget.bind("<Enter>", on_enter)
         widget.bind("<Leave>", on_leave)
 
+        # ---------------- Scrollable area helper ----------------
+    def create_scrollable_area(self, parent):
+        canvas = tk.Canvas(
+            parent,
+            bg=self.colors["main_bg"],
+            highlightthickness=0
+        )
+
+        scrollbar = ttk.Scrollbar(
+            parent,
+            orient="vertical",
+            command=canvas.yview
+        )
+
+        scrollable_frame = tk.Frame(
+            canvas,
+            bg=self.colors["main_bg"]
+        )
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window(
+            (0, 0),
+            window=scrollable_frame,
+            anchor="nw"
+        )
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        scrollable_frame.bind_all(
+            "<MouseWheel>",
+            lambda e: canvas.yview_scroll(
+                int(-1 * (e.delta / 120)), "units"
+            )
+        )
+
+        return scrollable_frame
+
     # ---------------- UI BUILD ----------------
 
     def build_ui(self):
@@ -197,9 +243,12 @@ class App:
             ).pack(anchor="center", pady=20)
             return
 
+        # ⬇️ CREATE SCROLLABLE CONTENT AREA
+        content = self.create_scrollable_area(self.main_panel)
+
         for entry in entries:
             card = tk.Frame(
-                self.main_panel,
+                content,
                 bg=self.colors["card_bg"],
                 padx=10,
                 pady=8
@@ -919,5 +968,7 @@ class App:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    #root.geometry("650x400")
+    root.minsize(650, 400)  # prevents breaking layout
     App(root)
     root.mainloop()
