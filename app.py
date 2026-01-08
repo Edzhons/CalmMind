@@ -53,6 +53,8 @@ class App:
 
         # BUILD UI
         self.build_ui()
+        
+        self.bind_shortcuts()
 
     # ---------------- Small helper for hover ----------------
     def add_hover(self, widget, normal_bg, hover_bg):
@@ -63,7 +65,7 @@ class App:
         widget.bind("<Enter>", on_enter)
         widget.bind("<Leave>", on_leave)
 
-        # ---------------- Scrollable area helper ----------------
+    # ---------------- Scrollable area helper ----------------
     def create_scrollable_area(self, parent):
         canvas = tk.Canvas(
             parent,
@@ -110,7 +112,6 @@ class App:
         return scrollable_frame
 
     # ---------------- UI BUILD ----------------
-
     def build_ui(self):
         # Sidebar
         sidebar = tk.Frame(
@@ -193,8 +194,27 @@ class App:
 
         self.refresh_current_view()
 
-    # ---------------- CENTRAL VIEW SWITCH ----------------
+    # ---------------- Keyboard shortcuts ----------------
+    def bind_shortcuts(self):
+        self.root.bind("<Control-n>", lambda e: self.open_new())
+        self.root.bind("<Control-N>", lambda e: self.open_new())
 
+        self.root.bind("<Control-1>", lambda e: self.switch_view("all"))
+        self.root.bind("<Control-2>", lambda e: self.switch_view("next"))
+        self.root.bind("<Control-3>", lambda e: self.switch_view("ideas"))
+        self.root.bind("<Control-4>", lambda e: self.switch_view("archive"))
+
+        self.root.bind("<Escape>", self._handle_escape)
+
+    def _handle_escape(self, event=None):
+        # Close topmost popup if any
+        focused = self.root.focus_get()
+        if focused:
+            win = focused.winfo_toplevel()
+            if win != self.root:
+                win.destroy()
+
+    # ---------------- CENTRAL VIEW SWITCH ----------------
     def switch_view(self, view_name):
         self.current_view = view_name
         self.refresh_current_view()
@@ -228,7 +248,6 @@ class App:
         self.refresh_main_panel(entries)
 
     # ---------------- MAIN VIEW RENDERING ----------------
-
     def refresh_main_panel(self, entries):
         for widget in self.main_panel.winfo_children():
             widget.destroy()
@@ -371,7 +390,6 @@ class App:
                 archive_btn.pack(side="right", padx=4)
 
     # ---------------- ENTRY CREATION ----------------
-
     def open_new(self):
         new_window = tk.Toplevel(self.root)
         new_window.title("New Entry")
@@ -792,7 +810,6 @@ class App:
         save_btn.configure(command=save_changes)
 
     # ---------------- ACTIONS ----------------
-
     def archive_entry(self, entry):
         entry.archived = True
         self.storage.save_entries(self.entries)
@@ -810,7 +827,6 @@ class App:
         self.refresh_current_view()
 
     # ---------------- AUTO ARCHIVE LOGIC ----------------
-
     def auto_archive_overdue(self):
         now = datetime.now()
         changed = False
