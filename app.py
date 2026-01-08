@@ -214,15 +214,6 @@ class App:
     def bind_escape_to_close(self, window):
         window.bind("<Escape>", lambda e: window.destroy())
 
-
-    def _handle_escape(self, event=None):
-        # Close topmost popup if any
-        focused = self.root.focus_get()
-        if focused:
-            win = focused.winfo_toplevel()
-            if win != self.root:
-                win.destroy()
-
     # ---------------- CENTRAL VIEW SWITCH ----------------
     def switch_view(self, view_name):
         self.current_view = view_name
@@ -255,6 +246,11 @@ class App:
 
         # RENDER
         self.refresh_main_panel(entries)
+
+    def focus_window(self, window):
+        window.transient(self.root)
+        window.grab_set()
+        window.focus_force()
 
     # ---------------- MAIN VIEW RENDERING ----------------
     def refresh_main_panel(self, entries):
@@ -401,10 +397,12 @@ class App:
     # ---------------- ENTRY CREATION ----------------
     def open_new(self):
         new_window = tk.Toplevel(self.root)
+        self.focus_window(new_window)
         self.bind_escape_to_close(new_window)
         new_window.title("New Entry")
         new_window.configure(bg=self.colors["main_bg"])
         new_window.geometry("500x620")
+        
 
         # ---------- REUSABLE STYLES ----------
         LABEL_STYLE = {
@@ -471,6 +469,7 @@ class App:
         tk.Label(container, text="Title:", **LABEL_STYLE).pack(fill="x")
         title_entry = tk.Entry(container, width=40, **ENTRY_STYLE)
         title_entry.pack(fill="x", padx=10, pady=(0, 10))
+        title_entry.focus_set()
 
         # DETAILS
         tk.Label(container, text="Details:", **LABEL_STYLE).pack(fill="x")
@@ -622,6 +621,7 @@ class App:
     # ---------------- ENTRY EDITING ----------------
     def open_edit(self, entry):
         edit_win = tk.Toplevel(self.root)
+        self.focus_window(edit_win)
         edit_win.title("Edit Entry")
         edit_win.configure(bg=self.colors["main_bg"])
         edit_win.geometry("500x620")
@@ -691,6 +691,7 @@ class App:
         title_entry = tk.Entry(container, width=40, **ENTRY_STYLE)
         title_entry.insert(0, entry.title)
         title_entry.pack(fill="x", padx=10, pady=(0, 10))
+        title_entry.focus_set()
 
         # DETAILS
         tk.Label(container, text="Details:", **LABEL_STYLE).pack(fill="x")
