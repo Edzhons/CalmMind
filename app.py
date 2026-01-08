@@ -622,6 +622,7 @@ class App:
     def open_edit(self, entry):
         edit_win = tk.Toplevel(self.root)
         self.focus_window(edit_win)
+        self.bind_escape_to_close(edit_win)
         edit_win.title("Edit Entry")
         edit_win.configure(bg=self.colors["main_bg"])
         edit_win.geometry("500x620")
