@@ -199,12 +199,21 @@ class App:
         self.root.bind("<Control-n>", lambda e: self.open_new())
         self.root.bind("<Control-N>", lambda e: self.open_new())
 
-        self.root.bind("<Control-1>", lambda e: self.switch_view("all"))
-        self.root.bind("<Control-2>", lambda e: self.switch_view("next"))
-        self.root.bind("<Control-3>", lambda e: self.switch_view("ideas"))
-        self.root.bind("<Control-4>", lambda e: self.switch_view("archive"))
+        self.root.bind("<Control-a>", lambda e: self.switch_view("all"))
+        self.root.bind("<Control-A>", lambda e: self.switch_view("all"))
 
-        self.root.bind("<Escape>", self._handle_escape)
+        self.root.bind("<Control-t>", lambda e: self.switch_view("next"))
+        self.root.bind("<Control-T>", lambda e: self.switch_view("next"))
+        
+        self.root.bind("<Control-i>", lambda e: self.switch_view("ideas"))
+        self.root.bind("<Control-I>", lambda e: self.switch_view("ideas"))
+
+        self.root.bind("<Control-r>", lambda e: self.switch_view("archive"))
+        self.root.bind("<Control-R>", lambda e: self.switch_view("archive"))
+
+    def bind_escape_to_close(self, window):
+        window.bind("<Escape>", lambda e: window.destroy())
+
 
     def _handle_escape(self, event=None):
         # Close topmost popup if any
@@ -392,6 +401,7 @@ class App:
     # ---------------- ENTRY CREATION ----------------
     def open_new(self):
         new_window = tk.Toplevel(self.root)
+        self.bind_escape_to_close(new_window)
         new_window.title("New Entry")
         new_window.configure(bg=self.colors["main_bg"])
         new_window.geometry("500x620")
